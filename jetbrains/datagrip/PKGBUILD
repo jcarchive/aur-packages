@@ -1,0 +1,34 @@
+# Maintainer: Jose C.
+
+pkgname=jetbrains-datagrip
+pkgver=2023.1
+pkgrel=1
+pkgdesc="IDE that is tailored to suit the specific needs of professional SQL developers."
+arch=('x86_64')
+options=('!strip')
+url="https://www.jetbrains.com/datagrip/"
+license=('Commercial')
+provides=('datagrip')
+conflicts=('datagrip')
+
+_filename="datagrip-$pkgver.tar.gz"
+_filextract="DataGrip-$pkgver"
+
+source=("https://download.jetbrains.com/datagrip/datagrip-$pkgver.tar.gz"
+"${pkgname}.desktop")
+
+sha256sums=( '0512cef755d7a465a8a525fc88b443a5f8ace062f5aa0598e51e38d2ad34f341'
+'087e7a8954fe266f1488b7294cd4fa53dd947b3d73af9e4d278dc3f44da17d46')
+
+package() {
+    #Create directories with permission rwxr-xr-x
+    install -m755 -d "${pkgdir}/usr/share" "${pkgdir}/usr/bin" "${pkgdir}/usr/share/applications"
+    
+    #Copy files to pkg destination
+    cp -r "${srcdir}/${_filextract}" "${pkgdir}/usr/share/${pkgname}"
+    chown -R root:root "${pkgdir}/usr/share/${pkgname}"
+    
+    ln -s "/usr/share/${pkgname}/bin/datagrip.sh" "${pkgdir}/usr/bin/datagrip"
+    sed -i "s/<version>/$pkgver/g" ${srcdir}/${pkgname}.desktop
+    install -m644 "${srcdir}/${pkgname}.desktop" "${pkgdir}/usr/share/applications"
+}
