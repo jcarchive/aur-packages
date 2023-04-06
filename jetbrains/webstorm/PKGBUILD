@@ -1,0 +1,38 @@
+# Maintainer: Jose C.
+
+pkgname=jetbrains-webstorm
+pkgver='2023.1'
+pkgrel=1
+pkgdesc='Integrated development environment for javascript and related technologies'
+arch=('x86_64')
+options=('!strip' 'staticlibs')
+url='https://www.jetbrains.com/webstorm/'
+license=('Commercial')
+optdepends=()
+provides=('webstorm')
+conflicts=('webstorm')
+
+_filename="WebStorm-${pkgver}.tar.gz"
+_filextract="WebStorm-231.8109.174"
+
+source=("https://download.jetbrains.com/webstorm/WebStorm-$pkgver.tar.gz" "${pkgname}.desktop")
+
+sha256sums=( 'bd074c7bafdcfcce4db001a4356040d0badd7cd2f65418a35b4156b00a07e94b'
+	'7938eaa87a61753019b3349fb62b322278327bfc0fd088e22427e7f66ac8d2bc') 
+
+package() {
+	cd "${srcdir}"
+
+	#Create directories with permission rwxr-xr-x
+	install -d -m755 "${pkgdir}/usr/share" 
+	install -d -m755 "${pkgdir}/usr/bin"
+	install -d -m755 "${pkgdir}/usr/share/applications"
+
+	#Copy files to pkg destination
+	cp -a "${_filextract}" "${pkgdir}/usr/share/${pkgname}"
+	chown -R root:root "${pkgdir}/usr/share/${pkgname}"
+
+	ln -s "/usr/share/jetbrains/webstorm/bin/webstorm.sh" "${pkgdir}/usr/bin/webstorm"
+	sed -i "s/<version>/$pkgver/g" ${srcdir}/${pkgname}.desktop
+	install -m644 "${srcdir}/${pkgname}.desktop" "${pkgdir}/usr/share/applications"
+}
