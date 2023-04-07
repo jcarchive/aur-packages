@@ -1,0 +1,38 @@
+# Maintainer: Jose C.
+
+pkgname=powershell
+pkgver=7.3.3
+pkgrel=1
+#pkgdesc='powershell is a multiplatform shell'
+arch=('x86_64')
+options=('!strip' 'staticlibs')
+url='https://github.com/PowerShell'
+license=('Commercial')
+optdepends=('mono: Free implementation of the .NET platform including runtime and compiler', 'dotnet-sdk: The .NET Core SDK')
+provides=('pwsh')
+conflicts=('pwsh')
+
+_filename="powershell-$pkgver-linux-x64.tar.gz"
+_filextract="$pkgname-$pkgver"
+
+source=("https://github.com/PowerShell/PowerShell/releases/download/v$pkgver/powershell-$pkgver-linux-x64.tar.gz"
+)
+
+sha256sums=( '478320F62C9BEC5765414B82B4086310777BF95AB2FC2310B2DB6CBC253B40B4')
+
+build() {
+	cd $srcdir
+	mkdir $_filextract
+	tar zxf $_filename -C $_filextract
+}
+
+package() {
+    #Create directories with permission rwxr-xr-x
+    install -m755 -d "${pkgdir}/usr/share" "${pkgdir}/usr/bin"
+    
+    #Copy files to pkg destination
+    cp -r "${srcdir}/${_filextract}" "${pkgdir}/usr/share/${pkgname}"
+    chown -R root:root "${pkgdir}/usr/share/${pkgname}"
+    
+    ln -s "/usr/share/${pkgname}/pwsh" "${pkgdir}/usr/bin/pwsh"
+}
