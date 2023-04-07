@@ -15,4 +15,14 @@ Welcome to jcarchive/aur-packages, a collection of custom packages for the Arch 
 - [microsoft/functions-core-tools](https://github.com/jcarchive/aur-packages/tree/main/microsoft-functions-core-tools): A set of tools for Azure Functions development
 - [microsoft/powershell](https://github.com/jcarchive/aur-packages/tree/main/microsoft-powershell): An open-source, cross-platform command-line shell and scripting language
 
+## Installation
+
+All packages in this repository utilize the standard directories installation for Arch Linux.
+
+- Application files are located in `/usr/share/<package_name>`
+- The symbolic link to the main executable is located in `/usr/bin/<package_executable>`
+- Desktop files, if needed, are located in `/usr/share/applications/<package_name>.desktop`
+
+Be sure to check the installation instructions for each package before proceeding.
+
 This repository is regularly updated with new packages and updates to existing packages.

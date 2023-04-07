@@ -1,12 +1,25 @@
-# AUR package for Azure CLI
-This repos contains an Arch User Repository package for Azure CLI following the next standard for the installation:
+# Azure CLI AUR Package for Arch Linux
 
-1. App files directory: `/usr/share/azure-cli`
-2. Executable `az` directory: `/usr/share/bin/az`
+This repository contains an Arch User Repository package for Azure CLI, a set of command-line tools for Azure management. This package installs the Azure CLI using Python's virtual environment.
 
-* The executable in `/usr/share/bin` is installed as symbolic link to the `az` bin inside the app files.
+This package follows a specific standard for installation:
 
-## * Notes
-This package may differ from the "official" in the AUR repository in the directories used for the installation and the steps used. The purpose of this package and others 
-ones in this account is for install all the programs that I used following certains standard (ie. using `/usr/share/{pkgname}` for app files and `/usr/bin/{execname}`
-for executable) and in some cases clean the installation steps from some bloat.
+- Application files directory: `/usr/share/azure-cli`
+- Executable az file: `/usr/bin/az`
+
+## Installation
+
+The installation process for the Azure CLI package involves:
+
+- Creating the necessary directories
+- Setting the installation directory
+- Creating a python virtual environment
+- Installing Azure CLI using pip
+- Installing the completion script
+- Creating a symbolic link to the `az` executable
+
+## Notes
+
+This package may differ from the "official" package in the AUR repository in the directories used for installation and the installation steps. The purpose of this package, and others in this account, is to install all the programs that I use following a certain standard (i.e. using `/usr/share/{pkgname}` for application files and `/usr/bin/{execname}` for the executable) and in some cases, clean the installation steps from some bloat.
+
+Feel free to reach out if you have any questions or concerns about this package.
