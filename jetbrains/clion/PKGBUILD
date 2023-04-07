@@ -1,0 +1,36 @@
+# Maintainer: Jose C.
+
+pkgname=jetbrains-clion
+pkgver='2023.1.1'
+pkgrel=1
+pkgdesc='A cross-platform IDE for C and C++'
+arch=('x86_64')
+options=('!strip' 'staticlibs')
+url='https://www.jetbrains.com/clion/'
+license=('Commercial')
+optdepends=('cmake' 'make')
+provides=('clion')
+conflicts=('clion')
+
+_filename="CLion-${pkgver}.tar.gz"
+_filextract="clion-$pkgver"
+
+
+source=("https://download.jetbrains.com/cpp/${_filename}"
+"${pkgname}.desktop")
+
+sha256sums=( '19f2f435ff21453f724e16b318a94d19c414fd5863aa08cc73e78c85a20d73c5'
+'d5850845389a4c3b72424008e0e196abdd5988cb4e2bbb01c9a8f64888daeaf2')
+
+package() {
+    #Create directories with permission rwxr-xr-x
+    install -m755 -d "${pkgdir}/usr/share" "${pkgdir}/usr/bin" "${pkgdir}/usr/share/applications"
+    
+    #Copy files to pkg destination
+    cp -r "${srcdir}/${_filextract}" "${pkgdir}/usr/share/${pkgname}"
+    chown -R root:root "${pkgdir}/usr/share/${pkgname}"
+    
+    ln -s "/usr/share/${pkgname}/bin/clion.sh" "${pkgdir}/usr/bin/clion"
+    sed -i "s/<version>/$pkgver/g" ${srcdir}/${pkgname}.desktop
+    install -m644 "${srcdir}/${pkgname}.desktop" "${pkgdir}/usr/share/applications"
+}
