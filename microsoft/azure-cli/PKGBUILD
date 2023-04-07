@@ -1,0 +1,39 @@
+# Maintainer: Jose C.
+
+pkgname=azure-cli
+pkgver=2.47.0 
+pkgrel=1
+pkgdesc="Command-line tools for Azure"
+arch=('any')
+url="https://github.com/Azure/azure-cli"
+license=('MIT')
+provides=('az')
+depends=('python' 'python-virtualenv')
+conflicts=('python-azure-cli')
+options=(!strip)
+
+source=('az.completion.sh')
+sha256sums=('f42adfe38f5e69fa4f88563f27cff1443047f0a29ae3a48bee7b376890dcc3a5')
+
+package() {
+	#Create directories with permission rwxr-xr-x
+	install -m755 -d "${pkgdir}/usr/share" "${pkgdir}/usr/bin"
+  if ! [[ -e $srcdir/tmp ]]; then
+    mkdir $srcdir/tmp
+  fi
+
+  INSTALL_DIR=$pkgdir/usr/share/$pkgname
+  if [[ -e $INSTALL_DIR ]]; then
+    echo 'Using $INSTALL_DIR existent';
+  else
+    python -m venv $INSTALL_DIR
+    source $INSTALL_DIR/bin/activate
+
+    pip install --cache-dir $srcdir/tmp "azure-cli==$pkgver" --upgrade
+  fi
+
+  install -m644 "$srcdir/az.completion.sh" "$pkgdir/usr/share/$pkgname"
+  echo -e "#!/bin/bash\n" "/usr/share/$pkgname/bin/python -m azure.cli" '$@' > $INSTALL_DIR/bin/az
+  chmod ugo+x $INSTALL_DIR/bin/az
+  ln -s "/usr/share/$pkgname/bin/az" "$pkgdir/usr/bin/az"
+}
