@@ -1,0 +1,36 @@
+# Maintainer: Jose C.
+
+pkgname=jetbrains-pycharm
+pkgver='2023.1'
+pkgrel=1
+pkgdesc='Cross-platform PYCHARM IDE based on the IntelliJ platform'
+arch=('x86_64')
+options=('!strip' 'staticlibs')
+url='https://www.jetbrains.com/pycharm/'
+license=('Commercial')
+optdepends=()
+provides=('pycharm')
+conflicts=('pycharm')
+
+_filename="pycharm-professional-$pkgver.tar.gz"
+_filextract="pycharm-$pkgver"
+
+
+source=("https://download.jetbrains.com/python/$_filename"
+"${pkgname}.desktop")
+
+sha256sums=( '26c3f49ad899178105943eb63e1abae85c40f2f44362a2b20629a6263a4f8da6'
+'cab8551805121c6c7ea8bc849522dd2570b477c28bea564695955afd741c1955')
+
+package() {
+    #Create directories with permission rwxr-xr-x
+    install -m755 -d "${pkgdir}/usr/share" "${pkgdir}/usr/bin" "${pkgdir}/usr/share/applications"
+    
+    #Copy files to pkg destination
+    cp -r "${srcdir}/${_filextract}" "${pkgdir}/usr/share/${pkgname}"
+    chown -R root:root "${pkgdir}/usr/share/${pkgname}"
+    
+    sed -i "s/<version>/$pkgver/g" ${srcdir}/${pkgname}.desktop
+    ln -s "/usr/share/${pkgname}/bin/pycharm.sh" "${pkgdir}/usr/bin/pycharm"
+    install -m644 "${srcdir}/${pkgname}.desktop" "${pkgdir}/usr/share/applications"
+}
